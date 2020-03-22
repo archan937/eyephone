@@ -12,32 +12,18 @@ EyePhone = (function() {
   'use strict';
 
   var
-    deviceIds = [],
+    facingModes = [
+      'environment',
+      'user'
+    ],
     index = 0,
     video,
     stream,
 
   init = function() {
-    collectDeviceIds(function() {
-      addStyle();
-      addVideo();
-      captureVideo();
-    });
-  },
-
-  collectDeviceIds = function(fn) {
-    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-      navigator.mediaDevices.enumerateDevices()
-        .then(function(devices) {
-          devices.forEach(function(device) {
-            if (device.kind == 'videoinput') {
-              console.log('Found video device ' + device.deviceId);
-              deviceIds.push(device.deviceId);
-            }
-          });
-        })
-        .then(fn);
-    }
+    addStyle();
+    addVideo();
+    captureVideo();
   },
 
   addStyle = function() {
@@ -70,12 +56,14 @@ EyePhone = (function() {
     video.playsInline = true;
     document.body.appendChild(video);
 
-    if (deviceIds.length > 1) {
-      video.addEventListener('dblclick', captureVideo);
+    if (facingModes.length > 1) {
+      document.addEventListener('dblclick', captureVideo);
     }
   },
 
   captureVideo = function() {
+    var mode = facingModes[index];
+
     if (stream) {
       stream.getTracks().forEach(function(track) {
         track.stop();
@@ -86,10 +74,9 @@ EyePhone = (function() {
     }
 
     navigator.mediaDevices.getUserMedia({
-      audio: true,
       video: {
-        deviceId: {
-          exact: deviceIds[index]
+        facingMode: {
+          exact: mode
         }
       }
     }).then(function(deviceStream) {
@@ -101,7 +88,7 @@ EyePhone = (function() {
 
     index++;
 
-    if (index == deviceIds.length) {
+    if (index == facingModes.length) {
       index = 0;
     }
   },
