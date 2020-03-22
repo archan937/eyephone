@@ -4,9 +4,9 @@ Use your phone as a full screen camera input device for your computer (e.g. usin
 
 ## Usage
 
-Visit the following address your phone: https://archan937.github.io/eyephone.
+Visit the following address with your phone: https://archan937.github.io/eyephone.
 
-Double tap to switch cameras (e.g. front versus back).
+Double tap to switch cameras (front versus rear).
 
 ## Contact me
 
